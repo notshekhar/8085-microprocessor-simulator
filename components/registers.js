@@ -1,6 +1,21 @@
 const RAM = require("../assembled/ram")
+const { H, M } = require("../config")
 
 function Regs() {
+    const setflags = {
+        CY: 1,
+        P: 4,
+        AC: 16,
+        Z: 64,
+        S: 128,
+    }
+    const resetflags = {
+        CY: 254,
+        P: 251,
+        AC: 239,
+        Z: 191,
+        S: 127,
+    }
     this.A = "00" //8-bit
     this.B = "00" //8-bit
     this.C = "00" //8-bit
@@ -27,14 +42,20 @@ function Regs() {
     this.getPair = function (r) {
         return this.pairs[r][0] + this.pairs[r][1]
     }
+    this.setFlag = function (f) {
+        this.F = this.F | setflags[f]
+    }
+    this.resetFlag = function (f) {
+        this.F = this.F & resetflags[f]
+    }
 }
 
-Object.defineProperty(Regs.prototype, "M", {
+Object.defineProperty(Regs.prototype, M, {
     get: function () {
-        return RAM.get(this.getPair("H"))
+        return RAM.get(this.getPair(H))
     },
     set: function (value) {
-        this._M = value
+        RAM.set(this.getPair(H), value)
     },
 })
 
@@ -43,7 +64,6 @@ module.exports = function Registers() {
     this.set = function (registor, value) {
         if (typeof value != "number" && parseInt(value, 16) > 255) return
         if (typeof value == "number" && value > 255) return
-
         regs[registor] = typeof value == "number" ? value : parseInt(value, 16)
     }
     this.get = function (registor) {
@@ -54,5 +74,8 @@ module.exports = function Registers() {
     }
     this.setPair = function (reg, value) {
         regs.setPair(reg, value)
+    }
+    this.setFlag = function (flag_name) {
+        regs.setFlag(flag_name)
     }
 }

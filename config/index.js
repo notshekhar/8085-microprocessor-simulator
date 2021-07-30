@@ -1,0 +1,16 @@
+module.exports = {
+    A: "A",
+    B: "B",
+    C: "C",
+    D: "D",
+    E: "E",
+    F: "F",
+    H: "H",
+    L: "L",
+    M: "M",
+    CY: "CY",
+    AC: "AC",
+    Z: "Z",
+    S: "S",
+    P: "P",
+}
