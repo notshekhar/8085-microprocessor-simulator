@@ -37,6 +37,7 @@ Object.defineProperty(Regs.prototype, "M", {
         this._M = value
     },
 })
+
 module.exports = function Registers() {
     const regs = new Regs()
     this.set = function (registor, value) {
@@ -46,7 +47,7 @@ module.exports = function Registers() {
         regs[registor] = typeof value == "number" ? value : parseInt(value, 16)
     }
     this.get = function (registor) {
-        return regs[registor].toString(16).red
+        return regs[registor].toString(16)
     }
     this.getPair = function (reg) {
         return regs.getPair(reg)

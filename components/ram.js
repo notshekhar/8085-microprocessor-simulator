@@ -18,6 +18,6 @@ module.exports = function Ram(capacity) {
             typeof value == "number" ? value : parseInt(value, 16)
     }
     this.get = function (location) {
-        return memory.memory[parseInt(location, 16)].toString(16).blue
+        return memory.memory[parseInt(location, 16)].toString(16)
     }
 }
