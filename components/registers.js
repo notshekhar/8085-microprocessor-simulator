@@ -1,4 +1,4 @@
-const RAM = require("../assembled/ram")
+const RAM = require("./ram")
 const { H, M } = require("../config")
 
 function Regs() {
@@ -59,7 +59,7 @@ Object.defineProperty(Regs.prototype, M, {
     },
 })
 
-module.exports = function Registers() {
+function Registers() {
     const regs = new Regs()
     this.set = function (registor, value) {
         if (typeof value != "number" && parseInt(value, 16) > 255) return
@@ -78,8 +78,9 @@ module.exports = function Registers() {
     this.setFlag = function (flag_name) {
         regs.setFlag(flag_name)
     }
-    this.resetFlag = function (flag){
+    this.resetFlag = function (flag) {
         regs.resetFlag(flag)
     }
-    
 }
+
+module.exports = new Registers()

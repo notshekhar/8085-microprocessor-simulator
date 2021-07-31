@@ -1,7 +1,7 @@
-const RAM = require("../assembled/ram")
-const REGS = require("../assembled/regs")
+const RAM = require("../components/ram")
+const REGS = require("../components/registers")
 
-const { A, AC, CY } = require("../config")
+const { A, AC, CY, H } = require("../config")
 
 function Instructions() {
     //Move data of Accumulator to memory location
@@ -47,6 +47,13 @@ function Instructions() {
     }
     this.ADI = function (value) {
         let sum = parseInt(REGS.get(A), 16) + value
+        sum = sum.toString(16)
+        sum = sum.length > 2 ? sum.slice(1) : sum
+        sum = parseInt(sum, 16)
+        REGS.set(A, sum)
+    }
+    this.ACI = function (value) {
+        let sum = parseInt(REGS.get(A), 16) + value
         if (sum > 255) {
             REGS.setFlag(CY)
         }
@@ -58,6 +65,14 @@ function Instructions() {
         }
         REGS.set(A, sum)
     }
+    this.DAD = function (regpair) {
+        let value = REGS.getPair(regpair)
+        let sum = parseInt(REGS.getPair(H), 16) + parseInt(value, 16)
+        if (sum > 65535) sum = sum.toString(16).slice(1)
+        else sum = sum.toString(16)
+
+        REGS.setPair(H, sum)
+    }
 }
 
-module.exports = Instructions
+module.exports = new Instructions()

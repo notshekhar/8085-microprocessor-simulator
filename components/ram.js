@@ -8,7 +8,7 @@ function Memory(capacity) {
     ).fill(0)
 }
 
-module.exports = function Ram(capacity) {
+function Ram(capacity) {
     const memory = new Memory(capacity)
     this.set = function (location, value = 0) {
         if (typeof value != "number" && parseInt(value, 16) > 255) return
@@ -21,3 +21,4 @@ module.exports = function Ram(capacity) {
         return memory.memory[parseInt(location, 16)].toString(16)
     }
 }
+module.exports = new Ram()
