@@ -78,4 +78,8 @@ module.exports = function Registers() {
     this.setFlag = function (flag_name) {
         regs.setFlag(flag_name)
     }
+    this.resetFlag = function (flag){
+        regs.resetFlag(flag)
+    }
+    
 }
