@@ -1,3 +1,5 @@
+// ---....---
+
 const RAM = require("../components/ram")
 const REGS = require("../components/registers")
 
@@ -28,10 +30,7 @@ function Instructions() {
         sum = parseInt(sum, 16)
         REGS.set(A, sum)
     }
-    //subtract value of reg to accumulator
-    this.SUB = function (reg) {
-        REGS.set(A, parseInt(REGS.get(A), 16) - parseInt(REGS.get(reg), 16))
-    }
+
     this.ADC = function (reg) {
         let sum = parseInt(REGS.get(A), 16) + parseInt(REGS.get(reg), 16)
         if (sum > 255) {
@@ -70,9 +69,25 @@ function Instructions() {
         let sum = parseInt(REGS.getPair(H), 16) + parseInt(value, 16)
         if (sum > 65535) sum = sum.toString(16).slice(1)
         else sum = sum.toString(16)
-
         REGS.setPair(H, sum)
+    }
+    //subtract value of reg to accumulator
+    this.SUB = function (reg) {
+        let sub = parseInt(REGS.get(A), 16) - parseInt(REGS.get(reg), 16)
+        sub = Math.abs(sub)
+        REGS.set(A, sub)
+    }
+    this.SBB = function (reg) {
+        let sub = parseInt(REGS.get(A), 16) - parseInt(REGS.get(reg), 16)
+        if(sub<0){
+            // do some stuff 
+            
+        }
+        sub = Math.abs(sub)
+        REGS.set(A, sub)
     }
 }
 
 module.exports = new Instructions()
+
+//___....___

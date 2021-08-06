@@ -1,3 +1,5 @@
+// ---....---
+
 require("colors")
 
 function Memory(capacity) {
@@ -11,8 +13,14 @@ function Memory(capacity) {
 function Ram(capacity) {
     const memory = new Memory(capacity)
     this.set = function (location, value = 0) {
-        if (typeof value != "number" && parseInt(value, 16) > 255) return
-        if (typeof value == "number" && value > 255) return
+        if (typeof value != "number" && parseInt(value, 16) > 255) {
+            memory.memory[location] = parseInt(value.slice(-2), 16)
+            return
+        }
+        if (typeof value == "number" && value > 255) {
+            memory.memory[location] = value % 100
+            return
+        }
 
         memory.memory[parseInt(location, 16)] =
             typeof value == "number" ? value : parseInt(value, 16)
@@ -21,4 +29,5 @@ function Ram(capacity) {
         return memory.memory[parseInt(location, 16)].toString(16)
     }
 }
+
 module.exports = new Ram()

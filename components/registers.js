@@ -1,3 +1,5 @@
+// ---....---
+
 const RAM = require("./ram")
 const { H, M } = require("../config")
 
@@ -16,17 +18,17 @@ function Regs() {
         Z: 191,
         S: 127,
     }
-    this.A = "00" //8-bit
-    this.B = "00" //8-bit
-    this.C = "00" //8-bit
-    this.D = "00" //8-bit
-    this.E = "00" //8-bit
-    this.F = "00" //8-bit
-    this.H = "00" //8-bit
-    this.L = "00" //8-bit
-    this.P = "00" //8-bit
-    this.C = "00" //8-bit
-    this._M = "00"
+    this.A = 0 //8-bit
+    this.B = 0 //8-bit
+    this.C = 0 //8-bit
+    this.D = 0 //8-bit
+    this.E = 0 //8-bit
+    this.F = 0 //8-bit
+    this.H = 0 //8-bit
+    this.L = 0 //8-bit
+    this.P = 0 //8-bit
+    this.C = 0 //8-bit
+    this._M = 0
     this.pairs = {
         H: [this.H, this.L], //memory pointer
         B: [this.B, this.C],
@@ -62,8 +64,14 @@ Object.defineProperty(Regs.prototype, M, {
 function Registers() {
     const regs = new Regs()
     this.set = function (registor, value) {
-        if (typeof value != "number" && parseInt(value, 16) > 255) return
-        if (typeof value == "number" && value > 255) return
+        if (typeof value != "number" && parseInt(value, 16) > 255) {
+            regs[registor] = parseInt(value.slice(-2), 16)
+            return
+        }
+        if (typeof value == "number" && value > 255) {
+            regs[registor] = value % 100
+            return
+        }
         regs[registor] = typeof value == "number" ? value : parseInt(value, 16)
     }
     this.get = function (registor) {
