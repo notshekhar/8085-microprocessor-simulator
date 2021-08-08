@@ -36,10 +36,15 @@ function Regs() {
         PC: [this.P, this.C], //program counter
     }
     this.setPair = function (reg, value) {
+        if (typeof value != "number") value = parseInt(value, 16)
+        value %= 0x10000
+        let temp = new Array(4).fill("0")
+        value = value.toString(16)
+        value = temp.map((e, i) => value[i] || e).join("")
         let firstHalf = value.slice(0, 2)
-        let secondHalf = value.slice(2)
+        let secondHalf = value.slice(-2)
         this.pairs[reg][0] = firstHalf
-        this.pairs[reg][1], secondHalf
+        this.pairs[reg][1] = secondHalf
     }
     this.getPair = function (r) {
         return this.pairs[r][0] + this.pairs[r][1]
@@ -64,21 +69,15 @@ Object.defineProperty(Regs.prototype, M, {
 function Registers() {
     const regs = new Regs()
     this.set = function (registor, value) {
-        if (typeof value != "number" && parseInt(value, 16) > 255) {
-            regs[registor] = parseInt(value.slice(-2), 16)
-            return
-        }
-        if (typeof value == "number" && value > 255) {
-            regs[registor] = value % 100
-            return
-        }
-        regs[registor] = typeof value == "number" ? value : parseInt(value, 16)
+        if (typeof value != "number") value = parseInt(value, 16)
+        value %= 0x100
+        regs[registor] = value
     }
     this.get = function (registor) {
-        return regs[registor].toString(16)
+        return regs[registor]
     }
     this.getPair = function (reg) {
-        return regs.getPair(reg)
+        return parseInt(regs.getPair(reg), 16)
     }
     this.setPair = function (reg, value) {
         regs.setPair(reg, value)

@@ -3,7 +3,7 @@
 const RAM = require("../components/ram")
 const REGS = require("../components/registers")
 
-const { A, AC, CY, H } = require("../config")
+const { A, AC, CY, H, B, D } = require("../config")
 
 function Instructions() {
     //Move data of Accumulator to memory location
@@ -24,67 +24,68 @@ function Instructions() {
     }
     //Add value of reg to accumulator
     this.ADD = function (reg) {
-        let sum = parseInt(REGS.get(A), 16) + parseInt(REGS.get(reg), 16)
-        sum = sum.toString(16)
-        sum = sum.length > 2 ? sum.slice(1) : sum
-        sum = parseInt(sum, 16)
+        let sum = REGS.get(A) + REGS.get(reg)
+        sum %= 0x100
         REGS.set(A, sum)
     }
 
     this.ADC = function (reg) {
-        let sum = parseInt(REGS.get(A), 16) + parseInt(REGS.get(reg), 16)
-        if (sum > 255) {
-            REGS.setFlag(CY)
-        }
-        sum = sum.toString(16)
-        sum = sum.length > 2 ? sum.slice(1) : sum
-        sum = parseInt(sum, 16)
-        if (sum > 15) {
-            REGS.setFlag(AC)
-        }
+        let sum = REGS.get(A) + REGS.get(reg)
+        if (sum > 0xff) REGS.setFlag(CY)
+        sum %= 0x100
+        if (sum > 15) REGS.setFlag(AC)
         REGS.set(A, sum)
     }
     this.ADI = function (value) {
-        let sum = parseInt(REGS.get(A), 16) + value
-        sum = sum.toString(16)
-        sum = sum.length > 2 ? sum.slice(1) : sum
-        sum = parseInt(sum, 16)
+        let sum = REGS.get(A) + value
+        sum %= 0x100
         REGS.set(A, sum)
     }
     this.ACI = function (value) {
-        let sum = parseInt(REGS.get(A), 16) + value
-        if (sum > 255) {
-            REGS.setFlag(CY)
-        }
-        sum = sum.toString(16)
-        sum = sum.length > 2 ? sum.slice(1) : sum
-        sum = parseInt(sum, 16)
-        if (sum > 15) {
-            REGS.setFlag(AC)
-        }
+        let sum = REGS.get(A) + value
+        if (sum > 0xff) REGS.setFlag(CY)
+        sum %= 0x100
+        if (sum > 0xf) REGS.setFlag(AC)
         REGS.set(A, sum)
     }
     this.DAD = function (regpair) {
         let value = REGS.getPair(regpair)
-        let sum = parseInt(REGS.getPair(H), 16) + parseInt(value, 16)
-        if (sum > 65535) sum = sum.toString(16).slice(1)
-        else sum = sum.toString(16)
+        let sum = REGS.getPair(H) + value
+        sum %= 0x10000
+        sum = sum.toString(16)
         REGS.setPair(H, sum)
     }
     //subtract value of reg to accumulator
     this.SUB = function (reg) {
-        let sub = parseInt(REGS.get(A), 16) - parseInt(REGS.get(reg), 16)
+        let sub = REGS.get(A) - REGS.get(reg)
         sub = Math.abs(sub)
         REGS.set(A, sub)
     }
     this.SBB = function (reg) {
-        let sub = parseInt(REGS.get(A), 16) - parseInt(REGS.get(reg), 16)
-        if(sub<0){
-            // do some stuff 
-            
-        }
+        let sub = REGS.get(A) - REGS.get(reg)
+        if (sub < 0) REGS.setFlag(B)
+
         sub = Math.abs(sub)
         REGS.set(A, sub)
+    }
+    this.SUI = function (val) {
+        if (typeof val != "number") val = parseInt(val, 16)
+        val %= 0x100
+        let sub = REGS.get(A) - val
+        if (sub < 0) REGS.setFlag(B)
+        sub = Math.abs(sub)
+        REGS.set(A, sub)
+    }
+    this.XCHG = function () {
+        let temp = REGS.getPair(H)
+        REGS.setPair(H, REGS.getPair(D))
+        REGS.setPair(D, temp)
+    }
+    this.INR = function (reg) {
+        let val = REGS.get(reg)
+        val += 1
+        val %= 0x100
+        REGS.set(reg, val)
     }
 }
 

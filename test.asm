@@ -1,0 +1,3 @@
+MVI A, 02H;
+MVI B, 01H;
+ADD B;
