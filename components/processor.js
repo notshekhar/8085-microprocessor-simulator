@@ -1,11 +1,11 @@
 // ---....---
 
-const RAM = require("../components/ram")
-const REGS = require("../components/registers")
+const RAM = require("./ram")
+const REGS = require("./registers")
 
 const { A, AC, CY, H, B, D } = require("../config")
 
-function Instructions() {
+function Processor() {
     //Move data of Accumulator to memory location
     this.STA = function (location) {
         RAM.set(location, REGS.get(A))
@@ -87,8 +87,15 @@ function Instructions() {
         val %= 0x100
         REGS.set(reg, val)
     }
+    this.INX = function (reg_pair) {
+        let val = REGS.getPair(reg_pair)
+        val += 1
+        // console.log("after", val)
+        val %= 0x10000
+        REGS.setPair(reg_pair, val)
+    }
 }
 
-module.exports = new Instructions()
+module.exports = new Processor()
 
 //___....___

@@ -40,7 +40,7 @@ function Regs() {
         value %= 0x10000
         let temp = new Array(4).fill("0")
         value = value.toString(16)
-        value = temp.map((e, i) => value[i] || e).join("")
+        value = temp.map((e, i) => value[value.length - (4 - i)] || e).join("")
         let firstHalf = value.slice(0, 2)
         let secondHalf = value.slice(-2)
         this.pairs[reg][0] = firstHalf
