@@ -3,7 +3,7 @@
 const ram = require("../components/ram")
 const regs = require("../components/registers")
 const P = require("../components/processor")
-const { B, A, D, H, M, Z } = require("../config")
+const { B, A, D, H, M, Z, F } = require("../config")
 
 function sub_instruction_test(a, b) {
     P.MVI(A, a)
@@ -132,7 +132,11 @@ test("DAA test", () => {
     expect(daa_test()).toBe(output)
 })
 
-
-function test_flag(flag){
+function test_flag() {
     regs.setFlag(Z)
+    return regs.get(F)
 }
+
+test("flag set", () => {
+    expect(test_flag()).toBe(64)
+})

@@ -75,9 +75,10 @@ Object.defineProperty(Regs.prototype, F, {
     },
     set: function (value) {
         let binary = value.toString(2)
+        let diff = this._F.length - binary.length
         for (let i = 0; i < binary.length; i++) {
             if (binary[i] == "1") {
-                this._F[i] = 1
+                this._F[i + diff] = 1
             }
         }
     },
