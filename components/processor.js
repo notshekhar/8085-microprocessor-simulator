@@ -78,7 +78,6 @@ function Processor() {
         let temp = REGS.getPair(H)
         REGS.setPair(H, REGS.getPair(D))
         REGS.setPair(D, temp)
-        console.log(REGS.getPair(D), "temp")
     }
     this.INR = function (reg) {
         let val = REGS.get(reg)

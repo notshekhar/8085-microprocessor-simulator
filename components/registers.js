@@ -69,7 +69,7 @@ function Registers() {
     this.set = function (registor, value) {
         if (typeof value != "number") value = parseInt(value, 16)
         value %= 0x100
-        regs[registor] = value
+        regs[registor] = Math.abs(value)
     }
     this.get = function (registor) {
         return regs[registor]
