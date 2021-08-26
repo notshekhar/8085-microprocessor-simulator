@@ -38,16 +38,14 @@ function Regs() {
     this.setPair = function (reg, value) {
         if (typeof value != "number") value = parseInt(value, 16)
         value %= 0x10000
-        let temp = new Array(4).fill("0")
-        value = value.toString(16)
-        value = temp.map((e, i) => value[value.length - (4 - i)] || e).join("")
-        let firstHalf = value.slice(0, 2)
-        let secondHalf = value.slice(-2)
+        let firstHalf = parseInt(value / 0x100)
+        let secondHalf = value % 0x100
         this.pairs[reg][0] = firstHalf
         this.pairs[reg][1] = secondHalf
     }
     this.getPair = function (r) {
-        return this.pairs[r][0] + this.pairs[r][1]
+        // return this.pairs[r][0] + this.pairs[r][1]
+        return this.pairs[r][0] * 0x100 + this.pairs[r][1]
     }
     this.setFlag = function (f) {
         this.F = this.F | setflags[f]
@@ -77,7 +75,7 @@ function Registers() {
         return regs[registor]
     }
     this.getPair = function (reg) {
-        return parseInt(regs.getPair(reg), 16)
+        return regs.getPair(reg)
     }
     this.setPair = function (reg, value) {
         regs.setPair(reg, value)

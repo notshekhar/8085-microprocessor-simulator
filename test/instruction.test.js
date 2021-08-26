@@ -27,6 +27,7 @@ function sui_test(val) {
 function xchg_test() {
     P.LXI(H, "2000")
     P.LXI(D, "2002")
+    console.log("setting LXI")
     P.XCHG()
     return [regs.getPair(H), regs.getPair(D)]
 }
@@ -91,20 +92,19 @@ test("INX Test", () => {
     }
 })
 
+function dcr_test(reg) {
+    P.DCR(reg)
+    return regs.get(reg)
+}
 
-// function dcr_test(reg) {
-//     P.DCR(reg)
-//     return regs.get(reg)
-// }
+test("DCR Test", () => {
+    P.MVI(A, 0x20)
+    P.MVI(B, 0x00)
+    P.MVI(M, 0x01)
+    let inputs = [A, B, M]
+    let outputs = [0x19, 0x01, 0x00]
 
-// test("INX Test", () => {
-//     P.MVI(A, 0x20)
-//     P.MVI(B, 0x00)
-//     P.MVI(M, 0x01)
-//     let inputs = [A, B, M]
-//     let outputs = [0x19, 0x01, 0x00]
-
-//     for (let i = 0; i < inputs.length; i++) {
-//         expect(inx_test(inputs[i])).toBe(outputs[i])
-//     }
-// })
+    for (let i = 0; i < inputs.length; i++) {
+        expect(dcr_test(inputs[i])).toBe(outputs[i])
+    }
+})

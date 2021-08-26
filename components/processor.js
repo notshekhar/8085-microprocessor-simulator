@@ -25,7 +25,6 @@ function Processor() {
     //Add value of reg to accumulator
     this.ADD = function (reg) {
         let sum = REGS.get(A) + REGS.get(reg)
-        sum %= 0x100
         REGS.set(A, sum)
     }
 
@@ -38,7 +37,6 @@ function Processor() {
     }
     this.ADI = function (value) {
         let sum = REGS.get(A) + value
-        sum %= 0x100
         REGS.set(A, sum)
     }
     this.ACI = function (value) {
@@ -80,19 +78,22 @@ function Processor() {
         let temp = REGS.getPair(H)
         REGS.setPair(H, REGS.getPair(D))
         REGS.setPair(D, temp)
+        console.log(REGS.getPair(D), "temp")
     }
     this.INR = function (reg) {
         let val = REGS.get(reg)
         val += 1
-        val %= 0x100
         REGS.set(reg, val)
     }
     this.INX = function (reg_pair) {
         let val = REGS.getPair(reg_pair)
         val += 1
-        // console.log("after", val)
-        val %= 0x10000
         REGS.setPair(reg_pair, val)
+    }
+    this.DCR = function (reg) {
+        let val = REGS.get(reg)
+        val -= 1
+        REGS.set(reg, val)
     }
 }
 
