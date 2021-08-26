@@ -107,3 +107,17 @@ test("DCR Test", () => {
         expect(dcr_test(inputs[i])).toBe(outputs[i])
     }
 })
+
+function dcx_test(reg_pair) {
+    P.DCX(reg_pair)
+    return regs.getPair(reg_pair)
+}
+test("DCX test", () => {
+    P.LXI(H, 0x2000)
+    P.LXI(D, 0x0)
+    let inputs = [H, D]
+    let outputs = [0x1fff, 0x01]
+    for (let i = 0; i < inputs.length; i++) {
+        expect(dcx_test(inputs[i])).toBe(outputs[i])
+    }
+})

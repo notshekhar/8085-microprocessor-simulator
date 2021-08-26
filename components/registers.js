@@ -38,6 +38,7 @@ function Regs() {
     this.setPair = function (reg, value) {
         if (typeof value != "number") value = parseInt(value, 16)
         value %= 0x10000
+        value = Math.abs(value)
         let firstHalf = parseInt(value / 0x100)
         let secondHalf = value % 0x100
         this.pairs[reg][0] = firstHalf

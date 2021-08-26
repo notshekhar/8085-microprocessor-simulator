@@ -94,6 +94,11 @@ function Processor() {
         val -= 1
         REGS.set(reg, val)
     }
+    this.DCX = function (r_pair) {
+        let val = REGS.getPair(r_pair)
+        val -= 1
+        REGS.setPair(r_pair, val)
+    }
 }
 
 module.exports = new Processor()
