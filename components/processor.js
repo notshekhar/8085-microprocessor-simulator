@@ -4,6 +4,7 @@ const RAM = require("./ram")
 const REGS = require("./registers")
 
 const { A, AC, CY, H, B, D } = require("../config")
+const { dec2bcd } = require("./functions")
 
 function Processor() {
     //Move data of Accumulator to memory location
@@ -98,6 +99,11 @@ function Processor() {
         let val = REGS.getPair(r_pair)
         val -= 1
         REGS.setPair(r_pair, val)
+    }
+    this.DAA = function () {
+        let val = REGS.get(A)
+        val = dec2bcd(val)
+        REGS.set(A, val)
     }
 }
 

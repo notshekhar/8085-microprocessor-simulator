@@ -1,7 +1,7 @@
 // ---....---
 
 const RAM = require("./ram")
-const { H, M } = require("../config")
+const { H, M, F } = require("../config")
 
 function Regs() {
     const setflags = {
@@ -23,12 +23,12 @@ function Regs() {
     this.C = 0 //8-bit
     this.D = 0 //8-bit
     this.E = 0 //8-bit
-    this.F = 0 //8-bit
+    this._F = [false, false, false, false, false, false, false, false]
+    // this.F = 0 //8-bit
     this.H = 0 //8-bit
     this.L = 0 //8-bit
     this.P = 0 //8-bit
     this.C = 0 //8-bit
-    this._M = 0
     this.pairs = {
         H: [this.H, this.L], //memory pointer
         B: [this.B, this.C],
@@ -48,6 +48,9 @@ function Regs() {
         // return this.pairs[r][0] + this.pairs[r][1]
         return this.pairs[r][0] * 0x100 + this.pairs[r][1]
     }
+    this.getFlag = function (f) {
+        return this.F
+    }
     this.setFlag = function (f) {
         this.F = this.F | setflags[f]
     }
@@ -62,6 +65,21 @@ Object.defineProperty(Regs.prototype, M, {
     },
     set: function (value) {
         RAM.set(this.getPair(H), value)
+    },
+})
+
+Object.defineProperty(Regs.prototype, F, {
+    get: function () {
+        let val = parseInt(this._F.map((e) => (e ? 1 : 0)).join(""), 2)
+        return val
+    },
+    set: function (value) {
+        let binary = value.toString(2)
+        for (let i = 0; i < binary.length; i++) {
+            if (binary[i] == "1") {
+                this._F[i] = 1
+            }
+        }
     },
 })
 
@@ -86,6 +104,9 @@ function Registers() {
     }
     this.resetFlag = function (flag) {
         regs.resetFlag(flag)
+    }
+    this.getFlag = function (f) {
+        return regs.getFlag(f)
     }
 }
 
